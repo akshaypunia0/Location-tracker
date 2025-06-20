@@ -35,7 +35,7 @@ socket.on('received-location', (data) => {
     .openPopup();
     
     if(markers[id]){
-        markers[id].setLatLan([latitude, longitude])
+        markers[id].setLatLng([latitude, longitude])
     }
     else{
         markers[id] = L.marker([latitude, longitude]).addTo(map)
