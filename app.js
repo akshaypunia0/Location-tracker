@@ -1,15 +1,28 @@
-import express from 'express'
-
-
-
+const express = require('express')
+const http = require('http')
+const path = require('path')
+const socketio = require('socket.io')
 
 const app = express()
+const server = http.createServer(app)
+const io = socketio(server)
 
-app.get('/', async (req, res) => {
-    res.send("Everything running")
+app.set('view engine', 'ejs')
+app.use(express.static(path.join(__dirname, 'public')))
+
+io.on('connection', (socket) => {
+    console.log('connected');
+    socket.on('send-location', (data) => {
+        io.emit('received-location', { id: socket.id, ...data})
+    })
+    
 })
 
-app.listen(5000, () => {
-    console.log("server running on port 5000");
-    
+
+app.get('/', async (req, res) => {
+    res.render('index')
+})
+
+server.listen(3000, () => {
+    console.log("Server running on port 5000");  
 })
